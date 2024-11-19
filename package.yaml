@@ -1,0 +1,31 @@
+license: BSD-2-Clause
+name: "srt-tools"
+language: GHC2024
+version: 0
+dependencies:
+  - base
+  - text
+
+ghc-options:
+  - -Wall
+  - -O2
+  - -threaded
+
+library:
+  source-dirs: src
+
+executable:
+  source-dirs: app
+  main: Main.hs
+  ghc-options: -rtsopts -with-rtsopts=-N
+  dependencies:
+    - base
+    - srt-tools
+
+tests:
+  test:
+    main: Spec.hs
+    source-dirs: test
+    dependencies:
+      - hspec
+      - srt-tools
