@@ -12,7 +12,7 @@ hsPkgs.developPackage {
   modifier = drv: pkgs.haskell.lib.overrideCabal drv (attrs:
     let
       prevTools = attrs.buildTools or [];
-      requiredTools = with pkgs; [fourmolu hlint];
+      requiredTools = with hsPkgs; [fourmolu hlint];
     in
       { buildTools = prevTools ++ requiredTools;
       }

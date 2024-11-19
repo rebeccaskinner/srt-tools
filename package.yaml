@@ -1,6 +1,6 @@
 license: BSD-2-Clause
 name: "srt-tools"
-language: GHC2024
+language: GHC2021
 version: 0
 dependencies:
   - base

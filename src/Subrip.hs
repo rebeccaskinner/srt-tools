@@ -1,3 +1,5 @@
+{-# LANGUAGE DerivingStrategies #-}
+{-# LANGUAGE OverloadedStrings #-}
 module Subrip where
 import Data.Word
 import Data.Text (Text)
@@ -124,13 +126,10 @@ compressSubtitles = resequenceSubtitles . Subrip . compress . getSubtitles
 
 renderSubtitles :: Subrip -> Text
 renderSubtitles (Subrip subtitles) =
-  Text.unlines $ renderSubtitle <$> subtitles
-
-main :: IO ()
-main = do
-  [inputFile, outputFile] <- getArgs
-  inputText <- Text.readFile inputFile
-  subs <- case parseSubrip inputText of
-            Left err -> ioError $ userError err
-            Right subs -> pure subs
-  Text.writeFile outputFile . renderSubtitles . compressSubtitles $ subs
+  Text.unlines . normalizeSpacing $ renderSubtitle <$> subtitles
+  where
+    normalizeSpacing = snd . foldr dropExtraSpaces (0 :: Int, []) . Text.lines . Text.unlines
+    dropExtraSpaces t (n, acc)
+      | Text.null t && n >= 1 = (n + 1, acc)
+      | Text.null t = (n + 1, t : acc)
+      | otherwise = (0, t : acc)
